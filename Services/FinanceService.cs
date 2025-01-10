@@ -11,6 +11,12 @@ namespace FinanceTrackingAPI.Services
             _applicationDbContext = applicationDbContext;
         }
 
+        public async Task AddExpenseAsync(Expense expense)
+        {
+            _applicationDbContext.Expenses.ToList();
+            await _applicationDbContext.SaveChangesAsync();
+        }
+
         public IEnumerable<Expense> GetExpenses()
         {
             return _applicationDbContext.Expenses.ToList();
