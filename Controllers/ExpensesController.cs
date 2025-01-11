@@ -13,8 +13,6 @@ namespace FinanceTrackingAPI.Controllers
         {
             _financeservice = financeService;
         }
-        [HttpGet]
-        public IActionResult GetExpenses() => Ok(_financeservice.GetExpenses());
         [HttpPost]
         public async Task<IActionResult> AddExpense([FromBody] Expense expense)
         {
@@ -24,6 +22,32 @@ namespace FinanceTrackingAPI.Controllers
             }
             await _financeservice.AddExpenseAsync(expense);
             return CreatedAtAction(nameof(GetExpenses), new { id = expense.Id }, expense);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetExpenses()
+        {
+            var expenses = await _financeservice.GetExpensesAsync();
+            return Ok(expenses);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetExpenseById(Guid id)
+        {
+            var expenseToGet = await _financeservice.GetExpenseByIdAsync(id);
+            if (expenseToGet == null)
+            {
+                return NotFound();
+            }
+            return Ok(expenseToGet);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteExpense(Guid id)
+        {
+            var expenseToDelete = await _financeservice.DeleteExpenseAsync(id);
+            if (!expenseToDelete)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }

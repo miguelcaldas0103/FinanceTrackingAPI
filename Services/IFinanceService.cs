@@ -4,7 +4,9 @@ namespace FinanceTrackingAPI.Services
 {
     public interface IFinanceService
     {
-        IEnumerable<Expense> GetExpenses();
+        Task<IEnumerable<Expense>> GetExpensesAsync();
         Task AddExpenseAsync(Expense expense);
+        Task<Expense> GetExpenseByIdAsync(Guid id);
+        Task<bool> DeleteExpenseAsync(Guid id);
     }
 }
