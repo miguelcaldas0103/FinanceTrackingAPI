@@ -1,3 +1,4 @@
+
 using FinanceTrackingAPI.Data;
 using FinanceTrackingAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,11 @@ namespace FinanceTrackingAPI.Services
             _applicationDbContext = applicationDbContext;
         }
 
-        public async Task AddExpenseAsync(Expense expense)
+        public async Task<Expense> AddExpenseAsync(Expense expense)
         {
             _applicationDbContext.Expenses.Add(expense);
             await _applicationDbContext.SaveChangesAsync();
+            return expense;
         }
 
         public async Task<IEnumerable<Expense>> GetExpensesAsync()
