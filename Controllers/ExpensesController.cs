@@ -66,56 +66,5 @@ namespace FinanceTrackingAPI.Controllers
             }
             return NoContent();
         }
-        public async Task<IActionResult> AddIncome([FromBody] Income income)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            await _financeservice.AddIncomeAsync(income);
-            return CreatedAtAction(nameof(GetIncomes), new { id = income.Id }, income);
-        }
-        [HttpGet]
-        public async Task<IActionResult> GetIncomes()
-        {
-            var incomes = await _financeservice.GetIncomesAsync();
-            return Ok(incomes);
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetIncomeById(Guid id)
-        {
-            var incomeToGet = await _financeservice.GetIncomeByIdAsync(id);
-            if (incomeToGet == null)
-            {
-                return NotFound();
-            }
-            return Ok(incomeToGet);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateIncome(Guid id, [FromBody] Income income)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var incomeToBeUpdated = await _financeservice.UpdateIncomeAsync(id, income);
-            if (incomeToBeUpdated == null)
-            {
-                return NotFound();
-            }
-            return Ok(incomeToBeUpdated);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteIncome(Guid id)
-        {
-            var incomeToDelete = await _financeservice.DeleteIncomeAsync(id);
-            if (!incomeToDelete)
-            {
-                return NotFound();
-            }
-            return NoContent();
-        }
     }
 }

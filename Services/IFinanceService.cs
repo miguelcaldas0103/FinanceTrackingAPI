@@ -10,7 +10,7 @@ namespace FinanceTrackingAPI.Services
         Task<Expense> UpdateExpenseAsync(Guid id, Expense updatedExpense);
         Task<bool> DeleteExpenseAsync(Guid id);
         Task<IEnumerable<Income>> GetIncomesAsync();
-        Task AddIncomeAsync(Income income);
+        Task<Income> AddIncomeAsync(Income income);
         Task<Income> GetIncomeByIdAsync(Guid id);
         Task<Income> UpdateIncomeAsync(Guid id, Income updatedIncome);
         Task<bool> DeleteIncomeAsync(Guid id);

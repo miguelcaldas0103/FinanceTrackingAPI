@@ -60,10 +60,11 @@ namespace FinanceTrackingAPI.Services
             return true;
         }
 
-        public async Task AddIncomeAsync(Income income)
+        public async Task<Income> AddIncomeAsync(Income income)
         {
             _applicationDbContext.Incomes.Add(income);
             await _applicationDbContext.SaveChangesAsync();
+            return income;
         }
 
         public async Task<IEnumerable<Income>> GetIncomesAsync()
