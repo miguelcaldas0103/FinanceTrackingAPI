@@ -2,7 +2,7 @@ using FinanceTrackingAPI.Models;
 using FinanceTrackingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Name
+namespace FinanceTrackingAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
