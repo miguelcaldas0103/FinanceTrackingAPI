@@ -1,3 +1,5 @@
+using FinanceTrackingAPI.Enums;
+
 namespace FinanceTrackingAPI.Models
 {
     public class Investment
@@ -5,7 +7,9 @@ namespace FinanceTrackingAPI.Models
         public Guid Id { get; set; }
         public float Amount { get; set; }
         public string Description { get; set; } = default!;
-        public DateTime DateOfIncome { get; set; }
+        public string Broker { get; set; } = default!;
+        public DateTime DateOfInvestment { get; set; }
+        public TypeOfInvestmentEnum TypeOfInvestment { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime ModifiedAt { get; set; }
     }

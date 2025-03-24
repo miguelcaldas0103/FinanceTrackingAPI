@@ -10,5 +10,7 @@ namespace FinanceTrackingAPI.Data
         }
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Investment> Investments { get; set; }
+        public DbSet<Saving> Savings { get; set; }
     }
 }

@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace FinanceTrackingAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ExpensesController : ControllerBase
     {
-        private readonly IFinanceService _financeservice;
+        private readonly IFinanceService _financeService;
         public ExpensesController(IFinanceService financeService)
         {
-            _financeservice = financeService;
+            _financeService = financeService;
         }
         [HttpPost]
         public async Task<IActionResult> AddExpense([FromBody] Expense expense)
@@ -20,19 +20,19 @@ namespace FinanceTrackingAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _financeservice.AddExpenseAsync(expense);
+            await _financeService.AddExpenseAsync(expense);
             return CreatedAtAction(nameof(GetExpenses), new { id = expense.Id }, expense);
         }
         [HttpGet]
         public async Task<IActionResult> GetExpenses()
         {
-            var expenses = await _financeservice.GetExpensesAsync();
+            var expenses = await _financeService.GetExpensesAsync();
             return Ok(expenses);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExpenseById(Guid id)
         {
-            var expenseToGet = await _financeservice.GetExpenseByIdAsync(id);
+            var expenseToGet = await _financeService.GetExpenseByIdAsync(id);
             if (expenseToGet == null)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace FinanceTrackingAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var expenseToBeUpdated = await _financeservice.UpdateExpenseAsync(id, expense);
+            var expenseToBeUpdated = await _financeService.UpdateExpenseAsync(id, expense);
             if (expenseToBeUpdated == null)
             {
                 return NotFound();
@@ -58,7 +58,7 @@ namespace FinanceTrackingAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExpense(Guid id)
         {
-            var expenseToDelete = await _financeservice.DeleteExpenseAsync(id);
+            var expenseToDelete = await _financeService.DeleteExpenseAsync(id);
             if (!expenseToDelete)
             {
                 return NotFound();
