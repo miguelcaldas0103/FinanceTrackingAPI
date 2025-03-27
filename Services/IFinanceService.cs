@@ -1,19 +1,21 @@
 using FinanceTrackingAPI.DTOs.Expense;
+using FinanceTrackingAPI.DTOs.Income;
 using FinanceTrackingAPI.Models;
 
 namespace FinanceTrackingAPI.Services
 {
     public interface IFinanceService
     {
-        Task<ExpenseDto> AddExpenseAsync(Expense expense);
-        Task<IEnumerable<Expense>> GetExpensesAsync();
-        Task<Expense> GetExpenseByIdAsync(Guid id);
-        Task<Expense> UpdateExpenseAsync(Guid id, Expense expense);
+        Task<CreateExpenseDto> AddExpenseAsync(CreateExpenseDto expenseDto);
+        Task<IEnumerable<ExpenseDto>> GetExpensesAsync();
+        Task<ExpenseDto> GetExpenseByIdAsync(Guid id);
+        Task<UpdateExpenseDto> UpdateExpenseAsync(Guid id, UpdateExpenseDto expenseDto);
         Task<bool> DeleteExpenseAsync(Guid id);
-        Task<IEnumerable<Income>> GetIncomesAsync();
-        Task<Income> AddIncomeAsync(Income income);
-        Task<Income> GetIncomeByIdAsync(Guid id);
-        Task<Income> UpdateIncomeAsync(Guid id, Income income);
+
+        Task<CreateIncomeDto> AddIncomeAsync(CreateIncomeDto incomeDto);
+        Task<IEnumerable<IncomeDto>> GetIncomesAsync();
+        Task<IncomeDto> GetIncomeByIdAsync(Guid id);
+        Task<UpdateIncomeDto> UpdateIncomeAsync(Guid id, UpdateIncomeDto incomeDto);
         Task<bool> DeleteIncomeAsync(Guid id);
     }
 }
