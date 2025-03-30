@@ -1,5 +1,4 @@
 using FinanceTrackingAPI.DTOs.Income;
-using FinanceTrackingAPI.Models;
 using FinanceTrackingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,7 +38,7 @@ namespace FinanceTrackingAPI.Controllers
             return Ok(incomeToGet);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateIncome([FromRoute] Guid id, [FromBody] UpdateIncomeDto updateIncomeDto)
         {
             if (!ModelState.IsValid)

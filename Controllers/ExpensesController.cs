@@ -1,5 +1,4 @@
 using FinanceTrackingAPI.DTOs.Expense;
-using FinanceTrackingAPI.Models;
 using FinanceTrackingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,7 +39,7 @@ namespace FinanceTrackingAPI.Controllers
             return Ok(expenseToGet);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateExpense([FromRoute] Guid id, [FromBody] UpdateExpenseDto updateExpenseDto)
         {
             if (!ModelState.IsValid)

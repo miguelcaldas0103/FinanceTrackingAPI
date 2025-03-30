@@ -73,6 +73,7 @@ namespace FinanceTrackingAPI.Services
             }
             expenseToBeUpdated.Amount = updateExpenseDto.Amount;
             expenseToBeUpdated.Description = updateExpenseDto.Description;
+            expenseToBeUpdated.ModifiedAt = updateExpenseDto.ModifiedAt;
 
             await _applicationDbContext.SaveChangesAsync();
             return true;
