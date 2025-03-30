@@ -1,5 +1,7 @@
 
 using FinanceTrackingAPI.Data;
+using FinanceTrackingAPI.DTOs.Expense;
+using FinanceTrackingAPI.DTOs.Income;
 using FinanceTrackingAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,39 +15,67 @@ namespace FinanceTrackingAPI.Services
             _applicationDbContext = applicationDbContext;
         }
 
-        public async Task<Expense> AddExpenseAsync(Expense expense)
+        public async Task<ExpenseDto> AddExpenseAsync(CreateExpenseDto createExpenseDto)
         {
+            var expense = new Expense
+            {
+                Amount = createExpenseDto.Amount,
+                Description = createExpenseDto.Description,
+                DateOfExpense = createExpenseDto.DateOfExpense,
+                TypeOfExpense = createExpenseDto.TypeOfExpense,
+            };
             _applicationDbContext.Expenses.Add(expense);
             await _applicationDbContext.SaveChangesAsync();
-            return expense;
+            return new ExpenseDto
+            {
+                Id = expense.Id,
+                Amount = expense.Amount,
+                Description = expense.Description,
+                DateOfExpense = expense.DateOfExpense,
+                TypeOfExpense = expense.TypeOfExpense
+            };
         }
 
-        public async Task<IEnumerable<Expense>> GetExpensesAsync()
+
+        public async Task<IEnumerable<ExpenseDto>> GetExpensesAsync()
         {
-            return await _applicationDbContext.Expenses.ToListAsync();
+            return await _applicationDbContext.Expenses
+                .Select(expense => new ExpenseDto
+                {
+                    Id = expense.Id,
+                    Amount = expense.Amount,
+                    Description = expense.Description,
+                    DateOfExpense = expense.DateOfExpense,
+                })
+                .ToListAsync();
         }
 
-        public async Task<Expense?> GetExpenseByIdAsync(Guid id)
+
+        public async Task<ExpenseDto> GetExpenseByIdAsync(Guid id)
         {
-            var expense = await _applicationDbContext.Expenses.FirstOrDefaultAsync(x => x.Id == id);
-            return expense;
+            var expense = await _applicationDbContext.Expenses.FirstAsync(x => x.Id == id);
+            return new ExpenseDto
+            {
+                Id = expense.Id,
+                Amount = expense.Amount,
+                Description = expense.Description,
+                DateOfExpense = expense.DateOfExpense,
+                TypeOfExpense = expense.TypeOfExpense
+            };
         }
 
-        public async Task<Expense> UpdateExpenseAsync(Guid id, Expense expense)
+        public async Task<bool> UpdateExpenseAsync(Guid id, UpdateExpenseDto updateExpenseDto)
         {
             var expenseToBeUpdated = await _applicationDbContext.Expenses.FirstOrDefaultAsync(x => x.Id == id);
             if (expenseToBeUpdated == null)
             {
-                return null;
+                return false;
             }
-            expenseToBeUpdated.Description = expense.Description;
-            expenseToBeUpdated.Amount = expense.Amount;
-            expenseToBeUpdated.DateOfExpense = expenseToBeUpdated.DateOfExpense;
-            expenseToBeUpdated.TypeOfExpense = expenseToBeUpdated.TypeOfExpense;
-            expenseToBeUpdated.ModifiedAt = DateTime.Now;
+            expenseToBeUpdated.Amount = updateExpenseDto.Amount;
+            expenseToBeUpdated.Description = updateExpenseDto.Description;
 
             await _applicationDbContext.SaveChangesAsync();
-            return expenseToBeUpdated;
+            return true;
         }
 
         public async Task<bool> DeleteExpenseAsync(Guid id)
@@ -60,38 +90,63 @@ namespace FinanceTrackingAPI.Services
             return true;
         }
 
-        public async Task<Income> AddIncomeAsync(Income income)
+        public async Task<IncomeDto> AddIncomeAsync(CreateIncomeDto createIncomeDto)
         {
+            var income = new Income
+            {
+                Amount = createIncomeDto.Amount,
+                Description = createIncomeDto.Description,
+                DateOfIncome = createIncomeDto.DateOfIncome,
+                TypeOfIncome = createIncomeDto.TypeOfIncome,
+            };
             _applicationDbContext.Incomes.Add(income);
             await _applicationDbContext.SaveChangesAsync();
-            return income;
+            return new IncomeDto
+            {
+                Id = income.Id,
+                Amount = income.Amount,
+                Description = income.Description,
+                DateOfIncome = income.DateOfIncome,
+                TypeOfIncome = income.TypeOfIncome
+            };
         }
 
-        public async Task<IEnumerable<Income>> GetIncomesAsync()
+        public async Task<IEnumerable<IncomeDto>> GetIncomesAsync()
         {
-            return await _applicationDbContext.Incomes.ToListAsync();
+            return await _applicationDbContext.Incomes.Select(income => new IncomeDto
+            {
+                Id = income.Id,
+                Amount = income.Amount,
+                Description = income.Description,
+                DateOfIncome = income.DateOfIncome,
+                TypeOfIncome = income.TypeOfIncome
+            }).ToListAsync();
         }
 
-        public async Task<Income?> GetIncomeByIdAsync(Guid id)
+        public async Task<IncomeDto> GetIncomeByIdAsync(Guid id)
         {
-            var incomeToFind = await _applicationDbContext.Incomes.FirstOrDefaultAsync(x => x.Id == id);
-            return incomeToFind;
+            var incomeToFind = await _applicationDbContext.Incomes.FirstAsync(x => x.Id == id);
+            return new IncomeDto
+            {
+                Id = incomeToFind.Id,
+                Amount = incomeToFind.Amount,
+                Description = incomeToFind.Description,
+                DateOfIncome = incomeToFind.DateOfIncome,
+                TypeOfIncome = incomeToFind.TypeOfIncome
+            };
         }
 
-        public async Task<Income?> UpdateIncomeAsync(Guid id, Income income)
+        public async Task<bool> UpdateIncomeAsync(Guid id, UpdateIncomeDto updateIncomeDto)
         {
             var incomeToBeUpdated = await _applicationDbContext.Incomes.FirstOrDefaultAsync(x => x.Id == id);
             if (incomeToBeUpdated == null)
             {
-                return null;
+                return false;
             }
-            incomeToBeUpdated.Description = income.Description;
-            incomeToBeUpdated.Amount = income.Amount;
-            incomeToBeUpdated.DateOfIncome = income.DateOfIncome;
-            incomeToBeUpdated.TypeOfIncome = income.TypeOfIncome;
-            incomeToBeUpdated.ModifiedAt = DateTime.Now;
+            incomeToBeUpdated.Amount = updateIncomeDto.Amount;
+            incomeToBeUpdated.Description = updateIncomeDto.Description;
             await _applicationDbContext.SaveChangesAsync();
-            return incomeToBeUpdated;
+            return true;
         }
 
         public async Task<bool> DeleteIncomeAsync(Guid id)

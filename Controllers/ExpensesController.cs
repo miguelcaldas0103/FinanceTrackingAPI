@@ -1,3 +1,4 @@
+using FinanceTrackingAPI.DTOs.Expense;
 using FinanceTrackingAPI.Models;
 using FinanceTrackingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,56 +14,49 @@ namespace FinanceTrackingAPI.Controllers
         {
             _financeService = financeService;
         }
+
         [HttpPost]
-        public async Task<IActionResult> AddExpense([FromBody] Expense expense)
+        public async Task<IActionResult> AddExpense([FromBody] CreateExpenseDto createExpenseDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            await _financeService.AddExpenseAsync(expense);
-            return CreatedAtAction(nameof(GetExpenses), new { id = expense.Id }, expense);
+            var createdExpense = await _financeService.AddExpenseAsync(createExpenseDto);
+            return CreatedAtAction(nameof(GetExpenses), new { id = createdExpense.Id }, createdExpense);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetExpenses()
         {
             var expenses = await _financeService.GetExpensesAsync();
             return Ok(expenses);
         }
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetExpenseById(Guid id)
+        public async Task<IActionResult> GetExpenseById([FromRoute] Guid id)
         {
             var expenseToGet = await _financeService.GetExpenseByIdAsync(id);
-            if (expenseToGet == null)
-            {
-                return NotFound();
-            }
             return Ok(expenseToGet);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateExpense(Guid id, [FromBody] Expense expense)
+        public async Task<IActionResult> UpdateExpense([FromRoute] Guid id, [FromBody] UpdateExpenseDto updateExpenseDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var expenseToBeUpdated = await _financeService.UpdateExpenseAsync(id, expense);
-            if (expenseToBeUpdated == null)
-            {
-                return NotFound();
-            }
-            return Ok(expenseToBeUpdated);
+
+            await _financeService.UpdateExpenseAsync(id, updateExpenseDto);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExpense(Guid id)
+        public async Task<IActionResult> DeleteExpense([FromRoute] Guid id)
         {
-            var expenseToDelete = await _financeService.DeleteExpenseAsync(id);
-            if (!expenseToDelete)
-            {
-                return NotFound();
-            }
+            await _financeService.DeleteExpenseAsync(id);
             return NoContent();
         }
     }

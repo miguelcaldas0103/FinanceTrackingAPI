@@ -1,3 +1,4 @@
+using FinanceTrackingAPI.DTOs.Income;
 using FinanceTrackingAPI.Models;
 using FinanceTrackingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,48 @@ namespace FinanceTrackingAPI.Controllers
             _financeService = financeService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AddIncome([FromBody] Income income)
+        [HttpPost]
+        public async Task<IActionResult> AddIncome([FromBody] CreateIncomeDto createIncomeDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            await _financeService.AddIncomeAsync(income);
-            return CreatedAtAction(nameof(AddIncome), income);
+            var createdIncome = await _financeService.AddIncomeAsync(createIncomeDto);
+            return CreatedAtAction(nameof(AddIncome), new { id = createdIncome.Id }, createIncomeDto);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetIncomes()
+        {
+            var incomes = await _financeService.GetIncomesAsync();
+            return Ok(incomes);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetIncomeById([FromRoute] Guid id)
+        {
+            var incomeToGet = await _financeService.GetIncomeByIdAsync(id);
+            return Ok(incomeToGet);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateIncome([FromRoute] Guid id, [FromBody] UpdateIncomeDto updateIncomeDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _financeService.UpdateIncomeAsync(id, updateIncomeDto);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteIncome([FromRoute] Guid id)
+        {
+            await _financeService.DeleteIncomeAsync(id);
+            return NoContent();
         }
     }
 }
